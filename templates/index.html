@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard flex items-center justify-center overflow-auto">
+        <section class="ml-60 pt-16">
+            <div class="px-6 py-8">
+              <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl p-8 mb-5">
+                  <h1 class="text-3xl font-bold mb-10">Training Dashboard</h1>
+                  <div class="flex items-center justify-between">
+                    
+                    
+                  </div>
+        
+                  <hr class="my-10">
+        
+                  <div class="grid grid-cols-2 gap-x-20">
+                    <div>
+                      <h2 class="text-2xl font-bold mb-4">Your Activities.</h2>
+        
+                      <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                          <div class="p-4 bg-green-100 rounded-xl">
+                            <div class="font-bold text-xl text-gray-800 leading-none">Hi user1,</div>
+                            <div class="mt-5">
+                              <button type="button" class="inline-flex items-center justify-center py-2 px-3 rounded-xl bg-white text-gray-800 hover:text-green-500 text-sm font-semibold transition">
+                                Join new Activity
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="p-4 bg-yellow-100 rounded-xl text-gray-800">
+                          <div class="font-bold text-2xl leading-none">5</div>
+                          <div class="mt-2">Activities completed.</div>
+                        </div>
+                        <div class="p-4 bg-yellow-100 rounded-xl text-gray-800">
+                          <div class="font-bold text-2xl leading-none">5</div>
+                          <div class="mt-2">Tracked hours.</div>
+                        </div>
+                        <div class="user-activities col-span-2" id="user-activities">
+                           
+                              
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <h2 class="text-2xl font-bold mb-1">Leaderboard</h2>
+                            <p class="text-gray-400 text-xs">Highest scores.</p>
+                        </div>
+                      
+                      <div class="space-y-4 leaderboard" id="leaderboard">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+        
+        <div id="myModal" class="modal hidden fixed inset-0 overflow-y-auto z-50">
+            <div class="flex items-center justify-center min-h-screen">
+                <div class="modal-overlay absolute w-full h-full bg-gray-500 opacity-75"></div>
+                <div class="modal-container bg-white w-1/2 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                    <div class="modal-content py-4 text-left px-6">
+                        <div class="flex justify-between items-center pb-3">
+                            <p class="text-2xl font-bold">Test Results</p>
+                            <button onclick="closeModal()" class="modal-close">
+                                <span class="text-3xl">&times;</span>
+                            </button>
+                        </div>
+                        <div id="responseContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Include Axios for making AJAX requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        fetchLeaderboard();
+        getUserActivity()
+
+        function fetchLeaderboard() {
+            const endpoint = '/api/leaderboard';
+            
+            axios.get(endpoint)
+                .then(response => {
+                    // Render leaderboard data in the table
+                    resp_data = response.data
+                    console.log(resp_data);
+                    renderLeaderboard(resp_data.data)
+                })
+                .catch(error => {
+                    console.error('Error fetching leaderboard', error);
+            });
+        }
+
+        function getUserActivity() {
+            const endpoint = '/api/user_activity';
+            
+            axios.get(endpoint)
+                .then(response => {
+                    resp_data = response.data
+                    console.log(resp_data)
+                    renderUserActivity(resp_data)
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+            });
+        }
+
+        function doTest(id){
+            console.log("hell yeah")
+            const postEndpoint = `/api/user_activity/${id}/finish_session/`;
+        
+        
+            axios.post(postEndpoint, {})
+                .then(response => {
+                    // Display response in popup
+                    const responseContent = document.getElementById('responseContent');
+                    responseContent.innerHTML = `<h2>${response.data.data.score}</h2>`;
+                    showModal();
+                    
+                    // Reload the page after a delay (3 seconds in this example)
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        // Function to render leaderboard data in the table
+        function renderLeaderboard(data) {
+            const leaderboardBody = document.getElementById('leaderboard');
+            leaderboardBody.innerHTML = ''; // Clear previous data
+            
+            // Loop through the leaderboard data and create table rows
+            data.forEach((user, index) => {
+                const row = `
+                    <div class="p-4 bg-white border rounded-xl text-gray-800 space-y-2 cursor-pointer">
+                        <div class="flex justify-between">
+                            <div>
+                                <p href="javascript:void(0)" class="font-bold text-yellow-800"> #${index + 1}</p>
+                                <div class="text-gray-400 text-xs">${user.username}</div>
+                            </div>
+                            
+                            <p href="javascript:void(0)" class="font-bold text-yellow-800 p-2"> ${user.highest_score}</p>
+                        </div>
+                        
+                    </div>
+                `;
+                leaderboardBody.innerHTML += row;
+            });
+        }
+
+        function renderUserActivity(data) {
+            const userActivityBody = document.getElementById('user-activities');
+            userActivityBody.innerHTML = ''; // Clear previous data
+            // Loop through the leaderboard data and create table rows
+            data.forEach((obj, index) => {
+                const row = `
+                    <div class="p-4 bg-purple-100 rounded-xl text-gray-800 mt-2 mb-2">
+                        
+                        <div class="font-bold text-xl leading-none">${obj.activity.name}</div>
+                        <div class="mt-1 mb-2">
+                            <p class="text-xs">${obj.activity.description}</p>
+                        </div>
+
+                        <p class="text-gray-400 text-xs">${obj.trials_left} trial(s) left</p>
+
+                        <div class="mt-4">
+                            ${obj.completed ? '<button class="bg-green-300 text-sm text-white px-3 py-1 rounded-xl">Completed</button>' 
+                                : `<button class="bg-black text-sm text-white px-3 py-1 rounded-xl" onclick="doTest(${obj.id})">Take test</button>`
+                            }
+                        <div>
+        
+                        
+                    </div>
+                `;
+                userActivityBody.innerHTML += row;
+            });
+        }
+
+       
+        function showModal() {
+            const modal = document.getElementById('myModal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.classList.add('hidden');
+        }
+        
+    </script>
+</body>
+</html>
