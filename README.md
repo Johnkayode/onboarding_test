@@ -97,7 +97,7 @@ very intentionally vague, and I want to see how you navigate this on your own,
 as that is a big part of the job.
 
 ## Solution
-Demo:
+### Demo
 ![](https://github.com/Johnkayode/onboarding_test/blob/main/demo.gif)
 
 - [x] User can take tests for registered activities.
