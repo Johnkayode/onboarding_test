@@ -85,7 +85,7 @@
         </div>
     </div>
 
-     <!-- Include Axios for making AJAX requests -->
+   
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         fetchLeaderboard();
@@ -96,7 +96,7 @@
             
             axios.get(endpoint)
                 .then(response => {
-                    // Render leaderboard data in the table
+                   
                     resp_data = response.data
                     console.log(resp_data);
                     renderLeaderboard(resp_data.data)
@@ -132,7 +132,7 @@
                     responseContent.innerHTML = `<h2>${response.data.data.score}</h2>`;
                     showModal();
                     
-                    // Reload the page after a delay (3 seconds in this example)
+                    // Reload the page after a delay 
                     setTimeout(() => {
                         location.reload();
                     }, 3000);
@@ -141,12 +141,12 @@
                     console.error('Error:', error);
                 });
         }
-        // Function to render leaderboard data in the table
+       
         function renderLeaderboard(data) {
             const leaderboardBody = document.getElementById('leaderboard');
             leaderboardBody.innerHTML = ''; // Clear previous data
             
-            // Loop through the leaderboard data and create table rows
+          
             data.forEach((user, index) => {
                 const row = `
                     <div class="p-4 bg-white border rounded-xl text-gray-800 space-y-2 cursor-pointer">
@@ -168,7 +168,7 @@
         function renderUserActivity(data) {
             const userActivityBody = document.getElementById('user-activities');
             userActivityBody.innerHTML = ''; // Clear previous data
-            // Loop through the leaderboard data and create table rows
+            
             data.forEach((obj, index) => {
                 const row = `
                     <div class="p-4 bg-purple-100 rounded-xl text-gray-800 mt-2 mb-2">

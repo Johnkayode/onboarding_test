@@ -97,8 +97,12 @@ very intentionally vague, and I want to see how you navigate this on your own,
 as that is a big part of the job.
 
 ## Solution
+Demo:
+![](https://github.com/Johnkayode/onboarding_test/blob/main/demo.gif)
+
 - [x] User can take tests for registered activities.
 - [x] User can retake tests (up to 3 trials).
 - [x] Activity tests up to 3 trials are marked completed.
 - [x] User can view Leaderboard (by highest score).
 - [ ] User can join new activity (Frontend not active yet).
+
