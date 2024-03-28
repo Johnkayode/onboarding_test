@@ -100,6 +100,7 @@ as that is a big part of the job.
 ### Demo
 ![](https://github.com/Johnkayode/onboarding_test/blob/main/demo.gif)
 
+### Features
 - [x] User can take tests for registered activities.
 - [x] User can retake tests (up to 3 trials).
 - [x] Activity tests up to 3 trials are marked completed.
